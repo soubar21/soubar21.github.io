@@ -1,12 +1,343 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>My Website</title>
+
+  <!-- ✏️ EDIT: the text shown on the browser tab -->
+  <title>Soumyadeep Mukherjee</title>
+  <!-- ✏️ EDIT: the short summary shown in Google and in link previews -->
+  <meta name="description" content="PhD student in computational cosmology at IIT Kharagpur.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,600&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* =====================================================
+       1. COLOURS AND FONTS  (change the look of the whole
+          site from this one block)
+       ===================================================== */
+    :root {
+      --bg: #f4f6f9;
+      --card: #ffffff;
+      --text: #1c2540;
+      --muted: #5a6479;
+      --accent: #4a3fbf;
+      --accent-soft: #e9e7fb;
+      --line: #d9dee8;
+      --serif: "Newsreader", Georgia, serif;
+      --sans: "Public Sans", system-ui, sans-serif;
+    }
+
+    /* Dark mode switches on automatically for visitors who use it */
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #131a2e;
+        --card: #1a2340;
+        --text: #e8ebf4;
+        --muted: #a2abc0;
+        --accent: #a79fff;
+        --accent-soft: #2a3260;
+        --line: #2b3552;
+      }
+    }
+
+    /* =====================================================
+       2. PAGE BASICS
+       ===================================================== */
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 70px; }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      font-size: 17px;
+      line-height: 1.65;
+    }
+
+    .spectrum {
+      height: 6px;
+      background: linear-gradient(90deg, #b3261e, #d9822b, #d8c13a, #4f9d69, #3b7dd8, #4a3fbf);
+    }
+
+    .wrap { max-width: 760px; margin: 0 auto; padding: 0 24px; }
+
+    a { color: var(--accent); text-underline-offset: 3px; }
+    a:hover { text-decoration-thickness: 2px; }
+    a:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 3px; }
+
+    p { margin: 0 0 16px; }
+
+    /* =====================================================
+       3. TOP MENU
+       ===================================================== */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: var(--bg);
+      border-bottom: 1px solid var(--line);
+    }
+    nav .wrap {
+      display: flex;
+      gap: 22px;
+      overflow-x: auto;       /* lets the menu scroll sideways on small phones */
+      padding-top: 14px;
+      padding-bottom: 14px;
+    }
+    nav a {
+      color: var(--muted);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.95rem;
+      white-space: nowrap;
+    }
+    nav a:hover { color: var(--accent); }
+
+    /* =====================================================
+       4. HEADER (photo, name, tagline)
+       ===================================================== */
+    header { padding: 64px 0 24px; }
+    header .wrap {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+
+    .photo {
+      flex: none;
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      object-fit: cover;
+      background: var(--accent-soft);
+      color: var(--accent);
+      display: grid;
+      place-items: center;
+      font-family: var(--serif);
+      font-size: 3rem;
+      font-weight: 600;
+    }
+
+    h1 {
+      font-family: var(--serif);
+      font-weight: 600;
+      font-size: clamp(2.2rem, 6vw, 3.3rem);
+      line-height: 1.1;
+      margin: 0 0 10px;
+    }
+    .tagline { font-size: 1.15rem; color: var(--muted); margin: 0 0 4px; }
+    .place { color: var(--muted); margin: 0; font-size: 0.98rem; }
+
+    @media (max-width: 600px) {
+      header .wrap { flex-direction: column; align-items: flex-start; gap: 20px; }
+      .photo { width: 120px; height: 120px; font-size: 2.4rem; }
+    }
+
+    /* =====================================================
+       5. SECTIONS
+       ===================================================== */
+    section { padding: 40px 0 8px; }
+
+    h2 {
+      font-family: var(--serif);
+      font-weight: 600;
+      font-size: 1.6rem;
+      margin: 0 0 16px;
+    }
+    h3 { font-size: 1.02rem; font-weight: 600; margin: 0 0 2px; }
+
+    /* One block per entry (education, publication, project, news) */
+    .entry {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 18px 20px;
+      margin-bottom: 14px;
+    }
+    .entry .meta { color: var(--muted); font-size: 0.93rem; margin: 0 0 8px; }
+    .entry p:last-child { margin-bottom: 0; }
+
+    /* Small rounded labels, used for research interests */
+    .tags { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 10px; }
+    .tags li {
+      background: var(--accent-soft);
+      color: var(--text);
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 0.95rem;
+    }
+
+    /* News list: date on the left, text on the right */
+    .news { list-style: none; padding: 0; margin: 0; }
+    .news li { display: flex; gap: 18px; margin-bottom: 10px; }
+    .news .date { flex: none; width: 90px; color: var(--muted); font-size: 0.93rem; }
+
+    /* Contact links */
+    .links { list-style: none; padding: 0; margin: 0; }
+    .links li { margin-bottom: 6px; }
+
+    footer {
+      margin-top: 48px;
+      padding: 24px 0 48px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+  </style>
 </head>
+
 <body>
-  <h1>Hello! This is Soumyadeep</h1>
-  <p>This is my first GitHub Pages site.</p>
+  <div class="spectrum"></div>
+
+  <!-- TOP MENU: each link jumps to the section with the matching id -->
+  <nav aria-label="Sections">
+    <div class="wrap">
+      <a href="#about">About</a>
+      <a href="#research">Research</a>
+      <a href="#education">Education</a>
+      <a href="#publications">Publications</a>
+      <a href="#projects">Projects</a>
+      <a href="#news">News</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </nav>
+
+  <!-- =====================  HEADER  ===================== -->
+  <header>
+    <div class="wrap">
+
+      <!-- ✏️ EDIT: the letters inside the circle are your initials.
+           To use a real photo, upload photo.jpg to your repository, then
+           delete the <div class="photo">…</div> line and remove the
+           arrows around the <img> line below. -->
+      <div class="photo" aria-hidden="true">SM</div>
+      <!-- <img class="photo" src="photo.jpg" alt="Photo of Soumyadeep Mukherjee"> -->
+
+      <div>
+        <!-- ✏️ EDIT: your name -->
+        <h1>Soumyadeep Mukherjee</h1>
+        <!-- ✏️ EDIT: your position -->
+        <p class="tagline">PhD student in computational cosmology</p>
+        <!-- ✏️ EDIT: your department and institute -->
+        <p class="place">Department of Physics, IIT Kharagpur, India</p>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+
+    <!-- =====================  ABOUT  ===================== -->
+    <section id="about">
+      <h2>About</h2>
+      <!-- ✏️ EDIT: write 2 to 4 sentences about yourself. Each <p>…</p> is one paragraph. -->
+      <p>
+        I am a first-year PhD student at IIT Kharagpur. I study the early universe
+        through the redshifted 21&nbsp;cm line of neutral hydrogen.
+      </p>
+      <p>
+        [Add one more paragraph here: what you are working on right now and what
+        you hope to find out.]
+      </p>
+    </section>
+
+    <!-- =====================  RESEARCH  ===================== -->
+    <section id="research">
+      <h2>Research interests</h2>
+      <!-- ✏️ EDIT: one <li> per interest. Copy a line to add more, delete a line to remove one. -->
+      <ul class="tags">
+        <li>21&nbsp;cm cosmology</li>
+        <li>Epoch of Reionization</li>
+        <li>Power spectrum estimation</li>
+        <li>Foreground mitigation</li>
+        <li>Radio-interferometric simulations</li>
+        <li>Machine learning</li>
+      </ul>
+    </section>
+
+    <!-- =====================  EDUCATION  ===================== -->
+    <section id="education">
+      <h2>Education</h2>
+
+      <!-- ✏️ EDIT: one <div class="entry"> block per degree. Copy the whole block to add another. -->
+      <div class="entry">
+        <h3>PhD, Physics</h3>
+        <p class="meta">IIT Kharagpur · [start year] to present</p>
+        <p>[One line about your PhD topic.]</p>
+      </div>
+
+      <div class="entry">
+        <h3>MSc, Physics</h3>
+        <p class="meta">IIT Kharagpur · [years]</p>
+        <p>Thesis: [title of your MSc thesis].</p>
+      </div>
+    </section>
+
+    <!-- =====================  PUBLICATIONS  ===================== -->
+    <section id="publications">
+      <h2>Publications</h2>
+
+      <!-- ✏️ EDIT: one block per paper. Put the paper's link in href="…".
+           If you have no papers yet, delete this whole section and the "Publications" link in the menu. -->
+      <div class="entry">
+        <h3>[Paper title]</h3>
+        <p class="meta">[Authors] · [Journal or arXiv ID], [year]</p>
+        <p><a href="#">Read the paper</a></p>
+      </div>
+    </section>
+
+    <!-- =====================  PROJECTS  ===================== -->
+    <section id="projects">
+      <h2>Projects</h2>
+
+      <!-- ✏️ EDIT: one block per project -->
+      <div class="entry">
+        <h3>[Project name]</h3>
+        <p class="meta">[Tools used, for example Python, simulation code]</p>
+        <p>[One or two sentences on what the project does.] <a href="#">View on GitHub</a></p>
+      </div>
+
+      <div class="entry">
+        <h3>[Another project]</h3>
+        <p class="meta">[Tools used]</p>
+        <p>[One or two sentences.] <a href="#">View on GitHub</a></p>
+      </div>
+    </section>
+
+    <!-- =====================  NEWS  ===================== -->
+    <section id="news">
+      <h2>News</h2>
+      <!-- ✏️ EDIT: one <li> per news item, newest first -->
+      <ul class="news">
+        <li><span class="date">[Month Year]</span><span>[Talk given, paper submitted, conference attended…]</span></li>
+        <li><span class="date">[Month Year]</span><span>[Another update.]</span></li>
+      </ul>
+    </section>
+
+    <!-- =====================  CONTACT  ===================== -->
+    <section id="contact">
+      <h2>Contact</h2>
+      <!-- ✏️ EDIT: replace each address. Delete any line you do not need. -->
+      <ul class="links">
+        <li>Email: <a href="mailto:your-email@example.com">your-email@example.com</a></li>
+        <li><a href="https://github.com/your-username">GitHub</a></li>
+        <li><a href="https://scholar.google.com/">Google Scholar</a></li>
+        <li><a href="https://www.linkedin.com/">LinkedIn</a></li>
+        <li><a href="cv.pdf">Curriculum vitae (PDF)</a></li>
+      </ul>
+    </section>
+
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <!-- ✏️ EDIT: your name and the year -->
+      © 2026 Soumyadeep Mukherjee
+    </div>
+  </footer>
 </body>
 </html>
